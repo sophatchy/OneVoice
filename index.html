@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ONE VOICE - The Echo of ១</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #05080a;
+            color: #f8fafc;
+            font-family: 'Kantumruy Pro', sans-serif;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* The Sacred ១ Symbol */
+        .khmer-one {
+            font-size: 12rem;
+            color: #fbbf24;
+            cursor: pointer;
+            position: relative;
+            z-index: 10;
+            user-select: none;
+            transition: transform 0.3s ease;
+            filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.4));
+        }
+
+        .khmer-one:hover {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 30px rgba(251, 191, 36, 0.8));
+        }
+
+        /* The Echo Ripple Effect */
+        .ripple {
+            position: absolute;
+            border: 2px solid #fbbf24;
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            animation: echo-ripple 3s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes echo-ripple {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: 0.8;
+                border-width: 4px;
+            }
+            100% {
+                width: 800px;
+                height: 800px;
+                opacity: 0;
+                border-width: 1px;
+            }
+        }
+
+        /* Message Overlay */
+        #message {
+            position: absolute;
+            bottom: 15%;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 1s ease;
+            width: 100%;
+            pointer-events: none;
+        }
+
+        .instruction {
+            position: absolute;
+            top: 10%;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.2rem;
+            font-size: 0.8rem;
+        }
+
+        .temple-bg {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 30%;
+            background: linear-gradient(transparent, rgba(251, 191, 36, 0.05));
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="instruction">Tap the One to speak for Peace</div>
+
+    <!-- The central trigger: Khmer Number 1 -->
+    <div id="main-trigger" class="khmer-one">១</div>
+
+    <div id="message">
+        <h2 class="text-2xl font-bold text-amber-500 mb-2">សម្លេងខ្មែរតែមួយ</h2>
+        <p class="text-slate-400 italic">"One Voice, One Nation, One Peace"</p>
+    </div>
+
+    <div class="temple-bg"></div>
+
+    <script>
+        const trigger = document.getElementById('main-trigger');
+        const message = document.getElementById('message');
+        
+        // Audio Context for a synthesized "Traditional Gong" sound
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playGong() {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(110, audioCtx.currentTime); // Deep resonance
+            osc.frequency.exponentialRampToValueAtTime(55, audioCtx.currentTime + 2);
+
+            gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 3);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 3);
+
+            // Add a subtle high-frequency chime
+            const chime = audioCtx.createOscillator();
+            const chimeGain = audioCtx.createGain();
+            chime.type = 'triangle';
+            chime.frequency.setValueAtTime(440, audioCtx.currentTime);
+            chimeGain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            chimeGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.5);
+            chime.connect(chimeGain);
+            chimeGain.connect(audioCtx.destination);
+            chime.start();
+            chime.stop(audioCtx.currentTime + 1.5);
+        }
+
+        function createRipple(e) {
+            const ripple = document.createElement('div');
+            ripple.className = 'ripple';
+            
+            // Center the ripple on the symbol
+            const rect = trigger.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            const y = rect.top + rect.height / 2;
+            
+            ripple.style.left = `${x}px`;
+            ripple.style.top = `${y}px`;
+            
+            document.body.appendChild(ripple);
+            
+            // Remove ripple after animation
+            setTimeout(() => {
+                ripple.remove();
+            }, 3000);
+        }
+
+        trigger.addEventListener('click', (e) => {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            
+            playGong();
+            createRipple(e);
+            
+            // Show message
+            message.style.opacity = '1';
+            
+            // Visual feedback on the number
+            trigger.style.transform = 'scale(1.3)';
+            setTimeout(() => {
+                trigger.style.transform = 'scale(1)';
+            }, 200);
+        });
+
+        // Background ripples for atmosphere
+        setInterval(() => {
+            if (Math.random() > 0.7) {
+                const rect = trigger.getBoundingClientRect();
+                const fakeEvent = {
+                    clientX: rect.left + rect.width / 2,
+                    clientY: rect.top + rect.height / 2
+                };
+                createRipple(fakeEvent);
+            }
+        }, 4000);
+
+    </script>
+</body>
+</html>
