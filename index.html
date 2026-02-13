@@ -3,152 +3,399 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ONE VOICE - The Echo of ១</title>
+    <title>ONE VOICE - សំឡេងខ្មែរតែមួយ</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --gold: #fbbf24;
+            --dark: #05080a;
+            --surface: #0f171d;
+        }
+
         body {
-            background-color: #05080a;
+            background-color: var(--dark);
             color: #f8fafc;
             font-family: 'Kantumruy Pro', sans-serif;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
+            scroll-behavior: smooth;
         }
 
-        /* The Sacred ១ Symbol */
-        .khmer-one {
-            font-size: 12rem;
-            color: #fbbf24;
+        /* Interactive Logo & Ripple Styles */
+        .logo-trigger {
             cursor: pointer;
             position: relative;
-            z-index: 10;
-            user-select: none;
-            transition: transform 0.3s ease;
-            filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.4));
+            z-index: 50;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            filter: drop-shadow(0 0 20px rgba(251, 191, 36, 0.2));
         }
 
-        .khmer-one:hover {
-            transform: scale(1.1);
-            filter: drop-shadow(0 0 30px rgba(251, 191, 36, 0.8));
+        .logo-trigger:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 40px rgba(251, 191, 36, 0.5));
         }
 
-        /* The Echo Ripple Effect */
         .ripple {
             position: absolute;
-            border: 2px solid #fbbf24;
+            border: 2px solid var(--gold);
             border-radius: 50%;
             pointer-events: none;
             transform: translate(-50%, -50%);
-            animation: echo-ripple 3s ease-out forwards;
+            animation: echo-ripple 3.5s ease-out forwards;
             opacity: 0;
+            z-index: 40;
         }
 
         @keyframes echo-ripple {
-            0% {
-                width: 0;
-                height: 0;
-                opacity: 0.8;
-                border-width: 4px;
-            }
-            100% {
-                width: 800px;
-                height: 800px;
-                opacity: 0;
-                border-width: 1px;
-            }
+            0% { width: 0; height: 0; opacity: 0.8; border-width: 6px; }
+            100% { width: 1200px; height: 1200px; opacity: 0; border-width: 1px; }
         }
 
-        /* Message Overlay */
-        #message {
-            position: absolute;
-            bottom: 15%;
-            text-align: center;
-            opacity: 0;
-            transition: opacity 1s ease;
-            width: 100%;
-            pointer-events: none;
+        /* Layout Elements */
+        .glass-card {
+            background: rgba(15, 23, 29, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(251, 191, 36, 0.1);
+            transition: all 0.3s ease;
         }
 
-        .instruction {
-            position: absolute;
-            top: 10%;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: 0.2rem;
-            font-size: 0.8rem;
+        .glass-card:hover {
+            border-color: rgba(251, 191, 36, 0.4);
         }
 
-        .temple-bg {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 30%;
-            background: linear-gradient(transparent, rgba(251, 191, 36, 0.05));
-            pointer-events: none;
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2rem;
         }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--gold);
+        }
+
+        /* Typography */
+        .khmer-text { line-height: 1.8; }
+        .gradient-text {
+            background: linear-gradient(to right, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Nav shadow */
+        nav {
+            background: rgba(5, 8, 10, 0.85);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(251, 191, 36, 0.05);
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--dark); }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
     </style>
 </head>
-<body>
+<body class="overflow-x-hidden">
 
-    <div class="instruction">Tap the One to speak for Peace</div>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-[100] px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <img src="https://sophatchy.com/wp-content/uploads/2026/02/OneVoice-01-1.png" alt="One Voice Logo" class="h-10 w-auto">
+                <span class="font-bold text-sm tracking-widest uppercase hidden md:block">One Voice</span>
+            </div>
+            <div class="flex gap-8 text-sm font-medium text-slate-400">
+                <a href="#about" class="hover:text-amber-400 transition-colors">Background</a>
+                <a href="#vision" class="hover:text-amber-400 transition-colors">Vision</a>
+                <a href="#team" class="hover:text-amber-400 transition-colors">The Collective</a>
+                <a href="#campaign" class="hover:text-amber-400 transition-colors">Campaign</a>
+            </div>
+        </div>
+    </nav>
 
-    <!-- The central trigger: Khmer Number 1 -->
-    <div id="main-trigger" class="khmer-one">១</div>
+    <!-- Hero Section -->
+    <header class="relative min-h-screen flex flex-col items-center justify-center pt-20 px-4 overflow-hidden">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(251,191,36,0.05)_0%,transparent_70%)]"></div>
+        
+        <!-- Main Logo Trigger -->
+        <div id="main-trigger" class="logo-trigger mb-12">
+            <img src="https://sophatchy.com/wp-content/uploads/2026/02/OneVoice-01-1.png" 
+                 alt="One Voice Cambodia" 
+                 class="w-64 md:w-80 h-auto rounded-full">
+        </div>
 
-    <div id="message">
-        <h2 class="text-2xl font-bold text-amber-500 mb-2">សម្លេងខ្មែរតែមួយ</h2>
-        <p class="text-slate-400 italic">"One Voice, One Nation, One Peace"</p>
-    </div>
+        <div class="text-center z-10 max-w-3xl">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4 tracking-tight">
+                សំឡេងខ្មែរតែមួយ
+            </h1>
+            <p class="text-xl md:text-2xl text-amber-500 font-light italic mb-8">
+                "We rise with dignity. We speak as ONE VOICE."
+            </p>
+            <p class="text-slate-400 text-sm md:text-base max-w-xl mx-auto leading-relaxed">
+                A collective movement rooted in Cambodian culture, using art as a shared voice to express national dignity, truth, and peace.
+            </p>
+            
+            <div class="mt-12 animate-bounce">
+                <a href="#about" class="text-slate-500 hover:text-amber-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
 
-    <div class="temple-bg"></div>
+    <!-- Historical Background -->
+    <section id="about" class="py-24 px-6">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="section-title text-3xl font-bold text-white">Historical Background</h2>
+            <div class="grid md:grid-cols-2 gap-12 mt-8">
+                <div class="space-y-6 text-slate-300 leading-relaxed">
+                    <p>
+                        ONE VOICE- សំឡេងខ្មែរតែមួយ began with the original artistic vision of the contemporary dance work, <strong>Garuda (Krud)</strong>, created in 1997. Staged as a live performance and short film in 2025 titled <em>"Defending Our Sacred Land, Raising Our Voice"</em>, it emerged at a time when Cambodia faces heightened tensions and threats.
+                    </p>
+                    <p>
+                        Born in response to the human cost of war—displaced civilians, children fleeing schools, and the destruction of sacred temples—ONE VOICE transforms suffering into strength. It is a movement without hatred or violence, calling for compassion, justice, and accountability.
+                    </p>
+                </div>
+                <div class="glass-card p-8 rounded-2xl flex flex-col justify-center">
+                    <h3 class="text-amber-500 font-bold text-xl mb-4">Core Values</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <span class="text-amber-500 mt-1">●</span>
+                            <div><strong class="text-white">Truth</strong> — so society stands on a correct foundation</div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-amber-500 mt-1">●</span>
+                            <div><strong class="text-white">Compassion</strong> — to heal all lives and suffering</div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-amber-500 mt-1">●</span>
+                            <div><strong class="text-white">Justice</strong> — to protect the innocent</div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-amber-500 mt-1">●</span>
+                            <div><strong class="text-white">Dignity</strong> — to preserve national honor</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vision & Mission -->
+    <section id="vision" class="py-24 bg-slate-900/30">
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16">
+            <div>
+                <h2 class="section-title text-3xl font-bold text-white">Our Vision</h2>
+                <p class="text-xl text-slate-300 font-light italic mt-6 leading-relaxed">
+                    "Art is a universal language and a moral, soulful, and spiritual force. We affirm that Cambodia’s sacred land is not a place for war, but a place for peace, dignity, and ethical responsibility."
+                </p>
+            </div>
+            <div>
+                <h2 class="section-title text-3xl font-bold text-white">Our Mission</h2>
+                <p class="text-slate-300 mt-6 leading-relaxed">
+                    To communicate Cambodia’s true history, cultural values, and spirit of peace through artistic performance, classical and contemporary arts, film, and digital media. ONE VOICE fosters a culture of morality and dignity, advocating for peace at national and international levels.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Collective / Team -->
+    <section id="team" class="py-24 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="section-title text-3xl font-bold text-white">The Collective</h2>
+                <p class="text-slate-400 mt-4">Visionaries, artists, and leaders united by a single purpose.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Hun Pen -->
+                <div class="glass-card p-6 rounded-2xl">
+                    <div class="h-16 w-16 bg-amber-500/20 rounded-full flex items-center justify-center mb-4">
+                        <span class="text-amber-500 font-bold text-xl">HP</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Hun Pen</h3>
+                    <p class="text-amber-500 text-sm mb-4">Director / Founder / Artist Lead</p>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        A visionary dancer and choreographer redefining Khmer dance. Deputy Director of Department of Performing Arts at the Ministry of Culture and Fine Arts. For over two decades, she has transformed heritage into living art.
+                    </p>
+                </div>
+
+                <!-- Theary Leo -->
+                <div class="glass-card p-6 rounded-2xl">
+                    <div class="h-16 w-16 bg-amber-500/20 rounded-full flex items-center justify-center mb-4">
+                        <span class="text-amber-500 font-bold text-xl">TL</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Theary Leo</h3>
+                    <p class="text-amber-500 text-sm mb-4">Co-Producer</p>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Independent filmmaker and author specializing in Communications. Trained by BBC Media Action, Leo is committed to promoting peace dialogue, mindfulness, and the exploration of human reality through storytelling.
+                    </p>
+                </div>
+
+                <!-- Prof Oum Vuthy -->
+                <div class="glass-card p-6 rounded-2xl">
+                    <div class="h-16 w-16 bg-amber-500/20 rounded-full flex items-center justify-center mb-4">
+                        <span class="text-amber-500 font-bold text-xl">OV</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Prof. Oum Vuthy</h3>
+                    <p class="text-amber-500 text-sm mb-4">Visual Storytelling & Directing</p>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Master of Arts in Directing with extensive experience in film production and theatre. A cultural contributor since 1987, award-winner for peace culture day campaigns, and former UNTAC contributor.
+                    </p>
+                </div>
+
+                <!-- Kim Hak -->
+                <div class="glass-card p-6 rounded-2xl">
+                    <div class="h-16 w-16 bg-amber-500/20 rounded-full flex items-center justify-center mb-4">
+                        <span class="text-amber-500 font-bold text-xl">KH</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Kim Hak</h3>
+                    <p class="text-amber-500 text-sm mb-4">Arts Photographer Lead</p>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Internationally recognized visual artist focusing on post-conflict narratives, memory, and cultural healing. His work preserves Cambodia’s social history through world-class photography.
+                    </p>
+                </div>
+
+                <!-- Nhak Tola -->
+                <div class="glass-card p-6 rounded-2xl">
+                    <div class="h-16 w-16 bg-amber-500/20 rounded-full flex items-center justify-center mb-4">
+                        <span class="text-amber-500 font-bold text-xl">NT</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Nhak Tola</h3>
+                    <p class="text-amber-500 text-sm mb-4">Musician Lead</p>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Specialist in traditional music researching musical scores of classical dance. He bridges traditional knowledge with contemporary creativity for national-level productions.
+                    </p>
+                </div>
+
+                <!-- SUM Sithen -->
+                <div class="glass-card p-6 rounded-2xl">
+                    <div class="h-16 w-16 bg-amber-500/20 rounded-full flex items-center justify-center mb-4">
+                        <span class="text-amber-500 font-bold text-xl">SS</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">SUM Sithen</h3>
+                    <p class="text-amber-500 text-sm mb-4">Film Production Advisor</p>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Film producer and founder of Sunflower Film Organization. He has mobilized thousands of enthusiasts and produced over 100 titles, advocating for youth narrative through cinema.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Campaign Roadmap -->
+    <section id="campaign" class="py-24 px-6 bg-amber-500/5">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="section-title text-3xl font-bold text-white text-center block mb-12">Campaign Structure</h2>
+            
+            <div class="space-y-8">
+                <!-- Phase I -->
+                <div class="flex flex-col md:flex-row gap-6 border-l-2 border-amber-500/30 pl-8 relative ml-4">
+                    <div class="absolute -left-[11px] top-0 w-5 h-5 bg-amber-500 rounded-full border-4 border-dark"></div>
+                    <div class="md:w-1/4"><h4 class="text-amber-500 font-bold">PHASE I</h4></div>
+                    <div class="md:w-3/4">
+                        <h5 class="text-white font-bold mb-2">Restoring Peace Rituals</h5>
+                        <p class="text-slate-400 text-sm">Filming of 20mn Contemporary Dance Film at Koh Ke Temple. 30 masters, priests, and monks restoring the 200-year lost Peace Ritual Ceremony.</p>
+                    </div>
+                </div>
+
+                <!-- Phase II -->
+                <div class="flex flex-col md:flex-row gap-6 border-l-2 border-amber-500/30 pl-8 relative ml-4">
+                    <div class="absolute -left-[11px] top-0 w-5 h-5 bg-amber-600 rounded-full border-4 border-dark"></div>
+                    <div class="md:w-1/4"><h4 class="text-amber-500 font-bold">PHASE II</h4></div>
+                    <div class="md:w-3/4">
+                        <h5 class="text-white font-bold mb-2">Expanding the Narrative</h5>
+                        <p class="text-slate-400 text-sm">Expansion to Chom Temple (Siem Reap) and Chiso Temple (Takeo). Mobilizing content creators and reaching out to Cambodia’s 5 border provinces.</p>
+                    </div>
+                </div>
+
+                <!-- Phase III -->
+                <div class="flex flex-col md:flex-row gap-6 border-l-2 border-amber-500/30 pl-8 relative ml-4">
+                    <div class="absolute -left-[11px] top-0 w-5 h-5 bg-amber-700 rounded-full border-4 border-dark"></div>
+                    <div class="md:w-1/4"><h4 class="text-amber-500 font-bold">PHASE III</h4></div>
+                    <div class="md:w-3/4">
+                        <h5 class="text-white font-bold mb-2">National Exhibition</h5>
+                        <p class="text-slate-400 text-sm">Photography Exhibition, screenings, and live performance in Phnom Penh and Siem Reap involving 150-300 artists.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-20 px-6 border-t border-slate-900">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-2 lg:grid-cols-4 gap-12">
+            <div class="col-span-1 lg:col-span-2">
+                <img src="https://sophatchy.com/wp-content/uploads/2026/02/OneVoice-01-1.png" alt="Logo" class="h-16 mb-6">
+                <p class="text-slate-500 max-w-sm">"We're not spreading hate and violence. Just history! Art as a voice of peace for the Khmer nation."</p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-4">Contact</h4>
+                <p class="text-slate-400 text-sm">HUN Pen, Founder & Director</p>
+                <p class="text-slate-400 text-sm">(855) 854436</p>
+                <p class="text-slate-400 text-sm">penhun@gmail.com</p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-4">Engagement</h4>
+                <p class="text-slate-400 text-sm">Filmmakers & Artists</p>
+                <p class="text-slate-400 text-sm">Religious Leaders</p>
+                <p class="text-slate-400 text-sm">Content Creators</p>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto mt-16 pt-8 border-t border-slate-900 text-center text-slate-600 text-xs">
+            &copy; 2026 ONE VOICE - សំឡេងខ្មែរតែមួយ. All rights reserved.
+        </div>
+    </footer>
 
     <script>
         const trigger = document.getElementById('main-trigger');
-        const message = document.getElementById('message');
         
-        // Audio Context for a synthesized "Traditional Gong" sound
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        // Audio Context for Gong
+        let audioCtx;
 
         function playGong() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
 
             osc.type = 'sine';
-            osc.frequency.setValueAtTime(110, audioCtx.currentTime); // Deep resonance
-            osc.frequency.exponentialRampToValueAtTime(55, audioCtx.currentTime + 2);
+            osc.frequency.setValueAtTime(110, audioCtx.currentTime); 
+            osc.frequency.exponentialRampToValueAtTime(55, audioCtx.currentTime + 2.5);
 
-            gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 3);
+            gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 3.5);
 
             osc.connect(gain);
             gain.connect(audioCtx.destination);
 
             osc.start();
-            osc.stop(audioCtx.currentTime + 3);
+            osc.stop(audioCtx.currentTime + 3.5);
 
-            // Add a subtle high-frequency chime
-            const chime = audioCtx.createOscillator();
-            const chimeGain = audioCtx.createGain();
-            chime.type = 'triangle';
-            chime.frequency.setValueAtTime(440, audioCtx.currentTime);
-            chimeGain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-            chimeGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.5);
-            chime.connect(chimeGain);
-            chimeGain.connect(audioCtx.destination);
-            chime.start();
-            chime.stop(audioCtx.currentTime + 1.5);
+            // Shimmer/High end
+            const shimmer = audioCtx.createOscillator();
+            const shimGain = audioCtx.createGain();
+            shimmer.type = 'triangle';
+            shimmer.frequency.setValueAtTime(330, audioCtx.currentTime);
+            shimGain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+            shimGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 2);
+            shimmer.connect(shimGain);
+            shimGain.connect(audioCtx.destination);
+            shimmer.start();
+            shimmer.stop(audioCtx.currentTime + 2);
         }
 
-        function createRipple(e) {
+        function createRipple() {
             const ripple = document.createElement('div');
             ripple.className = 'ripple';
             
-            // Center the ripple on the symbol
             const rect = trigger.getBoundingClientRect();
             const x = rect.left + rect.width / 2;
             const y = rect.top + rect.height / 2;
@@ -157,43 +404,41 @@
             ripple.style.top = `${y}px`;
             
             document.body.appendChild(ripple);
-            
-            // Remove ripple after animation
-            setTimeout(() => {
-                ripple.remove();
-            }, 3000);
+            setTimeout(() => ripple.remove(), 4000);
         }
 
-        trigger.addEventListener('click', (e) => {
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-            
+        trigger.addEventListener('click', () => {
             playGong();
-            createRipple(e);
+            createRipple();
             
-            // Show message
-            message.style.opacity = '1';
-            
-            // Visual feedback on the number
-            trigger.style.transform = 'scale(1.3)';
+            // Interaction visual
+            trigger.style.transform = 'scale(1.15) rotate(2deg)';
             setTimeout(() => {
-                trigger.style.transform = 'scale(1)';
-            }, 200);
+                trigger.style.transform = '';
+            }, 300);
         });
 
-        // Background ripples for atmosphere
+        // Ambient ripples
         setInterval(() => {
-            if (Math.random() > 0.7) {
-                const rect = trigger.getBoundingClientRect();
-                const fakeEvent = {
-                    clientX: rect.left + rect.width / 2,
-                    clientY: rect.top + rect.height / 2
-                };
-                createRipple(fakeEvent);
+            if (Math.random() > 0.85) {
+                createRipple();
             }
-        }, 4000);
+        }, 5000);
 
+        // Simple Reveal Animation on Scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100');
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('section').forEach(section => {
+            section.classList.add('transition-all', 'duration-1000', 'opacity-0', 'translate-y-10');
+            observer.observe(section);
+        });
     </script>
 </body>
 </html>
