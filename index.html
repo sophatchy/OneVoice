@@ -8,16 +8,37 @@
     <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
+            /* Dark Mode Defaults */
             --gold: #fbbf24;
-            --dark: #05080a;
-            --surface: #0f171d;
+            --gold-glow: rgba(251, 191, 36, 0.3);
+            --bg-color: #05080a;
+            --surface-color: #0f171d;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --glass-bg: rgba(15, 23, 29, 0.7);
+            --glass-border: rgba(251, 191, 36, 0.1);
+            --nav-bg: rgba(5, 8, 10, 0.85);
+            --ripple-opacity: 0.8;
+        }
+
+        /* Light Mode Variables */
+        body.light-mode {
+            --bg-color: #fcfcfc;
+            --surface-color: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --glass-border: rgba(251, 191, 36, 0.2);
+            --nav-bg: rgba(252, 252, 252, 0.9);
+            --ripple-opacity: 0.4;
         }
 
         body {
-            background-color: var(--dark);
-            color: #f8fafc;
+            background-color: var(--bg-color);
+            color: var(--text-main);
             font-family: 'Kantumruy Pro', sans-serif;
             scroll-behavior: smooth;
+            transition: background-color 0.5s ease, color 0.5s ease;
         }
 
         /* Interactive Logo & Ripple Styles */
@@ -26,12 +47,12 @@
             position: relative;
             z-index: 50;
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            filter: drop-shadow(0 0 20px rgba(251, 191, 36, 0.2));
+            filter: drop-shadow(0 0 20px var(--gold-glow));
         }
 
         .logo-trigger:hover {
             transform: scale(1.05);
-            filter: drop-shadow(0 0 40px rgba(251, 191, 36, 0.5));
+            filter: drop-shadow(0 0 40px var(--gold));
         }
 
         .ripple {
@@ -46,26 +67,32 @@
         }
 
         @keyframes echo-ripple {
-            0% { width: 0; height: 0; opacity: 0.8; border-width: 6px; }
+            0% { width: 0; height: 0; opacity: var(--ripple-opacity); border-width: 6px; }
             100% { width: 1200px; height: 1200px; opacity: 0; border-width: 1px; }
         }
 
         /* Layout Elements */
         .glass-card {
-            background: rgba(15, 23, 29, 0.7);
+            background: var(--glass-bg);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(251, 191, 36, 0.1);
+            border: 1px solid var(--glass-border);
             transition: all 0.3s ease;
+        }
+
+        .light-mode .glass-card {
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05);
         }
 
         .glass-card:hover {
             border-color: rgba(251, 191, 36, 0.4);
+            transform: translateY(-2px);
         }
 
         .section-title {
             position: relative;
             display: inline-block;
             margin-bottom: 2rem;
+            color: var(--text-main);
         }
 
         .section-title::after {
@@ -80,21 +107,38 @@
 
         /* Typography */
         .khmer-text { line-height: 1.8; }
-        .gradient-text {
-            background: linear-gradient(to right, #fbbf24, #f59e0b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+        .text-slate-400 { color: var(--text-muted) !important; }
+        .text-slate-300 { color: var(--text-muted) !important; }
 
         /* Nav shadow */
         nav {
-            background: rgba(5, 8, 10, 0.85);
+            background: var(--nav-bg);
             backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(251, 191, 36, 0.05);
+            border-bottom: 1px solid var(--glass-border);
+            transition: background-color 0.5s ease;
+        }
+
+        /* Mode Toggle Button */
+        .theme-toggle {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+            border-color: var(--gold);
+            transform: rotate(15deg);
         }
 
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--dark); }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
     </style>
@@ -108,11 +152,24 @@
                 <img src="https://sophatchy.com/wp-content/uploads/2026/02/OneVoice-01-1.png" alt="One Voice Logo" class="h-10 w-auto">
                 <span class="font-bold text-sm tracking-widest uppercase hidden md:block">One Voice</span>
             </div>
-            <div class="flex gap-8 text-sm font-medium text-slate-400">
-                <a href="#about" class="hover:text-amber-400 transition-colors">Background</a>
-                <a href="#vision" class="hover:text-amber-400 transition-colors">Vision</a>
-                <a href="#team" class="hover:text-amber-400 transition-colors">The Collective</a>
-                <a href="#campaign" class="hover:text-amber-400 transition-colors">Campaign</a>
+            
+            <div class="flex items-center gap-4 md:gap-8">
+                <div class="hidden md:flex gap-8 text-sm font-medium text-slate-400">
+                    <a href="#about" class="hover:text-amber-400 transition-colors">Background</a>
+                    <a href="#vision" class="hover:text-amber-400 transition-colors">Vision</a>
+                    <a href="#team" class="hover:text-amber-400 transition-colors">The Collective</a>
+                    <a href="#campaign" class="hover:text-amber-400 transition-colors">Campaign</a>
+                </div>
+                
+                <!-- Theme Toggle -->
+                <button id="theme-btn" class="theme-toggle" aria-label="Toggle Dark Mode">
+                    <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                    <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-amber-500 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 9H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                </button>
             </div>
         </div>
     </nav>
@@ -152,7 +209,7 @@
     <!-- Historical Background -->
     <section id="about" class="py-24 px-6">
         <div class="max-w-5xl mx-auto">
-            <h2 class="section-title text-3xl font-bold text-white">Historical Background</h2>
+            <h2 class="section-title text-3xl font-bold">Historical Background</h2>
             <div class="grid md:grid-cols-2 gap-12 mt-8">
                 <div class="space-y-6 text-slate-300 leading-relaxed">
                     <p>
@@ -167,19 +224,19 @@
                     <ul class="space-y-4">
                         <li class="flex items-start gap-3">
                             <span class="text-amber-500 mt-1">●</span>
-                            <div><strong class="text-white">Truth</strong> — so society stands on a correct foundation</div>
+                            <div><strong class="text-main">Truth</strong> — so society stands on a correct foundation</div>
                         </li>
                         <li class="flex items-start gap-3">
                             <span class="text-amber-500 mt-1">●</span>
-                            <div><strong class="text-white">Compassion</strong> — to heal all lives and suffering</div>
+                            <div><strong class="text-main">Compassion</strong> — to heal all lives and suffering</div>
                         </li>
                         <li class="flex items-start gap-3">
                             <span class="text-amber-500 mt-1">●</span>
-                            <div><strong class="text-white">Justice</strong> — to protect the innocent</div>
+                            <div><strong class="text-main">Justice</strong> — to protect the innocent</div>
                         </li>
                         <li class="flex items-start gap-3">
                             <span class="text-amber-500 mt-1">●</span>
-                            <div><strong class="text-white">Dignity</strong> — to preserve national honor</div>
+                            <div><strong class="text-main">Dignity</strong> — to preserve national honor</div>
                         </li>
                     </ul>
                 </div>
@@ -188,16 +245,16 @@
     </section>
 
     <!-- Vision & Mission -->
-    <section id="vision" class="py-24 bg-slate-900/30">
+    <section id="vision" class="py-24 bg-slate-900/10 dark:bg-slate-900/30">
         <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16">
             <div>
-                <h2 class="section-title text-3xl font-bold text-white">Our Vision</h2>
+                <h2 class="section-title text-3xl font-bold">Our Vision</h2>
                 <p class="text-xl text-slate-300 font-light italic mt-6 leading-relaxed">
                     "Art is a universal language and a moral, soulful, and spiritual force. We affirm that Cambodia’s sacred land is not a place for war, but a place for peace, dignity, and ethical responsibility."
                 </p>
             </div>
             <div>
-                <h2 class="section-title text-3xl font-bold text-white">Our Mission</h2>
+                <h2 class="section-title text-3xl font-bold">Our Mission</h2>
                 <p class="text-slate-300 mt-6 leading-relaxed">
                     To communicate Cambodia’s true history, cultural values, and spirit of peace through artistic performance, classical and contemporary arts, film, and digital media. ONE VOICE fosters a culture of morality and dignity, advocating for peace at national and international levels.
                 </p>
@@ -209,77 +266,72 @@
     <section id="team" class="py-24 px-6">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-16">
-                <h2 class="section-title text-3xl font-bold text-white">The Collective</h2>
+                <h2 class="section-title text-3xl font-bold">The Collective</h2>
                 <p class="text-slate-400 mt-4">Visionaries, artists, and leaders united by a single purpose.</p>
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Hun Pen -->
+                <!-- Team Cards -->
                 <div class="glass-card p-6 rounded-2xl">
                     <div class="h-16 w-16 bg-amber-500/20 rounded-full flex items-center justify-center mb-4">
                         <span class="text-amber-500 font-bold text-xl">HP</span>
                     </div>
-                    <h3 class="text-xl font-bold text-white">Hun Pen</h3>
+                    <h3 class="text-xl font-bold">Hun Pen</h3>
                     <p class="text-amber-500 text-sm mb-4">Director / Founder / Artist Lead</p>
                     <p class="text-slate-400 text-sm leading-relaxed">
                         A visionary dancer and choreographer redefining Khmer dance. Deputy Director of Department of Performing Arts at the Ministry of Culture and Fine Arts. For over two decades, she has transformed heritage into living art.
                     </p>
                 </div>
 
-                <!-- Theary Leo -->
                 <div class="glass-card p-6 rounded-2xl">
                     <div class="h-16 w-16 bg-amber-500/20 rounded-full flex items-center justify-center mb-4">
                         <span class="text-amber-500 font-bold text-xl">TL</span>
                     </div>
-                    <h3 class="text-xl font-bold text-white">Theary Leo</h3>
+                    <h3 class="text-xl font-bold">Theary Leo</h3>
                     <p class="text-amber-500 text-sm mb-4">Co-Producer</p>
                     <p class="text-slate-400 text-sm leading-relaxed">
                         Independent filmmaker and author specializing in Communications. Trained by BBC Media Action, Leo is committed to promoting peace dialogue, mindfulness, and the exploration of human reality through storytelling.
                     </p>
                 </div>
 
-                <!-- Prof Oum Vuthy -->
                 <div class="glass-card p-6 rounded-2xl">
                     <div class="h-16 w-16 bg-amber-500/20 rounded-full flex items-center justify-center mb-4">
                         <span class="text-amber-500 font-bold text-xl">OV</span>
                     </div>
-                    <h3 class="text-xl font-bold text-white">Prof. Oum Vuthy</h3>
+                    <h3 class="text-xl font-bold">Prof. Oum Vuthy</h3>
                     <p class="text-amber-500 text-sm mb-4">Visual Storytelling & Directing</p>
                     <p class="text-slate-400 text-sm leading-relaxed">
                         Master of Arts in Directing with extensive experience in film production and theatre. A cultural contributor since 1987, award-winner for peace culture day campaigns, and former UNTAC contributor.
                     </p>
                 </div>
 
-                <!-- Kim Hak -->
                 <div class="glass-card p-6 rounded-2xl">
                     <div class="h-16 w-16 bg-amber-500/20 rounded-full flex items-center justify-center mb-4">
                         <span class="text-amber-500 font-bold text-xl">KH</span>
                     </div>
-                    <h3 class="text-xl font-bold text-white">Kim Hak</h3>
+                    <h3 class="text-xl font-bold">Kim Hak</h3>
                     <p class="text-amber-500 text-sm mb-4">Arts Photographer Lead</p>
                     <p class="text-slate-400 text-sm leading-relaxed">
                         Internationally recognized visual artist focusing on post-conflict narratives, memory, and cultural healing. His work preserves Cambodia’s social history through world-class photography.
                     </p>
                 </div>
 
-                <!-- Nhak Tola -->
                 <div class="glass-card p-6 rounded-2xl">
                     <div class="h-16 w-16 bg-amber-500/20 rounded-full flex items-center justify-center mb-4">
                         <span class="text-amber-500 font-bold text-xl">NT</span>
                     </div>
-                    <h3 class="text-xl font-bold text-white">Nhak Tola</h3>
+                    <h3 class="text-xl font-bold">Nhak Tola</h3>
                     <p class="text-amber-500 text-sm mb-4">Musician Lead</p>
                     <p class="text-slate-400 text-sm leading-relaxed">
                         Specialist in traditional music researching musical scores of classical dance. He bridges traditional knowledge with contemporary creativity for national-level productions.
                     </p>
                 </div>
 
-                <!-- SUM Sithen -->
                 <div class="glass-card p-6 rounded-2xl">
                     <div class="h-16 w-16 bg-amber-500/20 rounded-full flex items-center justify-center mb-4">
                         <span class="text-amber-500 font-bold text-xl">SS</span>
                     </div>
-                    <h3 class="text-xl font-bold text-white">SUM Sithen</h3>
+                    <h3 class="text-xl font-bold">SUM Sithen</h3>
                     <p class="text-amber-500 text-sm mb-4">Film Production Advisor</p>
                     <p class="text-slate-400 text-sm leading-relaxed">
                         Film producer and founder of Sunflower Film Organization. He has mobilized thousands of enthusiasts and produced over 100 titles, advocating for youth narrative through cinema.
@@ -292,35 +344,33 @@
     <!-- Campaign Roadmap -->
     <section id="campaign" class="py-24 px-6 bg-amber-500/5">
         <div class="max-w-5xl mx-auto">
-            <h2 class="section-title text-3xl font-bold text-white text-center block mb-12">Campaign Structure</h2>
+            <h2 class="section-title text-3xl font-bold text-center block mb-12">Campaign Structure</h2>
             
             <div class="space-y-8">
-                <!-- Phase I -->
+                <!-- Phases -->
                 <div class="flex flex-col md:flex-row gap-6 border-l-2 border-amber-500/30 pl-8 relative ml-4">
-                    <div class="absolute -left-[11px] top-0 w-5 h-5 bg-amber-500 rounded-full border-4 border-dark"></div>
+                    <div class="absolute -left-[11px] top-0 w-5 h-5 bg-amber-500 rounded-full border-4 border-[var(--bg-color)]"></div>
                     <div class="md:w-1/4"><h4 class="text-amber-500 font-bold">PHASE I</h4></div>
                     <div class="md:w-3/4">
-                        <h5 class="text-white font-bold mb-2">Restoring Peace Rituals</h5>
+                        <h5 class="font-bold mb-2">Restoring Peace Rituals</h5>
                         <p class="text-slate-400 text-sm">Filming of 20mn Contemporary Dance Film at Koh Ke Temple. 30 masters, priests, and monks restoring the 200-year lost Peace Ritual Ceremony.</p>
                     </div>
                 </div>
 
-                <!-- Phase II -->
                 <div class="flex flex-col md:flex-row gap-6 border-l-2 border-amber-500/30 pl-8 relative ml-4">
-                    <div class="absolute -left-[11px] top-0 w-5 h-5 bg-amber-600 rounded-full border-4 border-dark"></div>
+                    <div class="absolute -left-[11px] top-0 w-5 h-5 bg-amber-600 rounded-full border-4 border-[var(--bg-color)]"></div>
                     <div class="md:w-1/4"><h4 class="text-amber-500 font-bold">PHASE II</h4></div>
                     <div class="md:w-3/4">
-                        <h5 class="text-white font-bold mb-2">Expanding the Narrative</h5>
+                        <h5 class="font-bold mb-2">Expanding the Narrative</h5>
                         <p class="text-slate-400 text-sm">Expansion to Chom Temple (Siem Reap) and Chiso Temple (Takeo). Mobilizing content creators and reaching out to Cambodia’s 5 border provinces.</p>
                     </div>
                 </div>
 
-                <!-- Phase III -->
                 <div class="flex flex-col md:flex-row gap-6 border-l-2 border-amber-500/30 pl-8 relative ml-4">
-                    <div class="absolute -left-[11px] top-0 w-5 h-5 bg-amber-700 rounded-full border-4 border-dark"></div>
+                    <div class="absolute -left-[11px] top-0 w-5 h-5 bg-amber-700 rounded-full border-4 border-[var(--bg-color)]"></div>
                     <div class="md:w-1/4"><h4 class="text-amber-500 font-bold">PHASE III</h4></div>
                     <div class="md:w-3/4">
-                        <h5 class="text-white font-bold mb-2">National Exhibition</h5>
+                        <h5 class="font-bold mb-2">National Exhibition</h5>
                         <p class="text-slate-400 text-sm">Photography Exhibition, screenings, and live performance in Phnom Penh and Siem Reap involving 150-300 artists.</p>
                     </div>
                 </div>
@@ -329,33 +379,63 @@
     </section>
 
     <!-- Footer -->
-    <footer class="py-20 px-6 border-t border-slate-900">
+    <footer class="py-20 px-6 border-t border-slate-900/10">
         <div class="max-w-7xl mx-auto grid md:grid-cols-2 lg:grid-cols-4 gap-12">
             <div class="col-span-1 lg:col-span-2">
                 <img src="https://sophatchy.com/wp-content/uploads/2026/02/OneVoice-01-1.png" alt="Logo" class="h-16 mb-6">
                 <p class="text-slate-500 max-w-sm">"We're not spreading hate and violence. Just history! Art as a voice of peace for the Khmer nation."</p>
             </div>
             <div>
-                <h4 class="text-white font-bold mb-4">Contact</h4>
+                <h4 class="font-bold mb-4">Contact</h4>
                 <p class="text-slate-400 text-sm">HUN Pen, Founder & Director</p>
                 <p class="text-slate-400 text-sm">(855) 854436</p>
                 <p class="text-slate-400 text-sm">penhun@gmail.com</p>
             </div>
             <div>
-                <h4 class="text-white font-bold mb-4">Engagement</h4>
+                <h4 class="font-bold mb-4">Engagement</h4>
                 <p class="text-slate-400 text-sm">Filmmakers & Artists</p>
                 <p class="text-slate-400 text-sm">Religious Leaders</p>
                 <p class="text-slate-400 text-sm">Content Creators</p>
             </div>
         </div>
-        <div class="max-w-7xl mx-auto mt-16 pt-8 border-t border-slate-900 text-center text-slate-600 text-xs">
+        <div class="max-w-7xl mx-auto mt-16 pt-8 border-t border-slate-900/10 text-center text-slate-600 text-xs">
             &copy; 2026 ONE VOICE - សំឡេងខ្មែរតែមួយ. All rights reserved.
         </div>
     </footer>
 
     <script>
+        const body = document.body;
+        const themeBtn = document.getElementById('theme-btn');
+        const moonIcon = document.getElementById('moon-icon');
+        const sunIcon = document.getElementById('sun-icon');
         const trigger = document.getElementById('main-trigger');
         
+        // Theme Management
+        function toggleTheme() {
+            body.classList.toggle('light-mode');
+            const isLight = body.classList.contains('light-mode');
+            
+            // Save preference
+            localStorage.setItem('onevoice-theme', isLight ? 'light' : 'dark');
+            
+            // Toggle icons
+            if (isLight) {
+                moonIcon.classList.add('hidden');
+                sunIcon.classList.remove('hidden');
+            } else {
+                moonIcon.classList.remove('hidden');
+                sunIcon.classList.add('hidden');
+            }
+        }
+
+        // Initialize Theme
+        const savedTheme = localStorage.getItem('onevoice-theme');
+        if (savedTheme === 'light') {
+            toggleTheme();
+        }
+
+        themeBtn.addEventListener('click', toggleTheme);
+
         // Audio Context for Gong
         let audioCtx;
 
@@ -398,7 +478,7 @@
             
             const rect = trigger.getBoundingClientRect();
             const x = rect.left + rect.width / 2;
-            const y = rect.top + rect.height / 2;
+            const y = rect.top + rect.height / 2 + window.scrollY;
             
             ripple.style.left = `${x}px`;
             ripple.style.top = `${y}px`;
